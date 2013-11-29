@@ -1,0 +1,9 @@
+D:\Samples\TestEmail\TestEmail\TestEmail\obj\Debug\ResolveAssemblyReference.cache
+D:\Samples\TestEmail\TestEmail\TestEmail\obj\Debug\TestEmail.Form1.resources
+D:\Samples\TestEmail\TestEmail\TestEmail\obj\Debug\TestEmail.Properties.Resources.resources
+D:\Samples\TestEmail\TestEmail\TestEmail\obj\Debug\TestEmail.csproj.GenerateResource.Cache
+D:\Samples\TestEmail\TestEmail\TestEmail\bin\Debug\TestEmail.exe
+D:\Samples\TestEmail\TestEmail\TestEmail\bin\Debug\TestEmail.pdb
+D:\Samples\TestEmail\TestEmail\TestEmail\bin\Debug\Interop.Redemption.dll
+D:\Samples\TestEmail\TestEmail\TestEmail\obj\Debug\TestEmail.exe
+D:\Samples\TestEmail\TestEmail\TestEmail\obj\Debug\TestEmail.pdb
