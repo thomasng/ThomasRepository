@@ -41,6 +41,7 @@
             this.btnDefaultEmailSend = new System.Windows.Forms.Button();
             this.btnVerifySenderEmail = new System.Windows.Forms.Button();
             this.btnResolve = new System.Windows.Forms.Button();
+            this.btnTest = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtSenderEmail
@@ -79,7 +80,7 @@
             // 
             this.btnSend.Location = new System.Drawing.Point(513, 23);
             this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(75, 54);
+            this.btnSend.Size = new System.Drawing.Size(146, 54);
             this.btnSend.TabIndex = 4;
             this.btnSend.Text = "Send Email";
             this.btnSend.UseVisualStyleBackColor = true;
@@ -90,11 +91,11 @@
             this.txtResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtResults.Location = new System.Drawing.Point(28, 133);
+            this.txtResults.Location = new System.Drawing.Point(28, 186);
             this.txtResults.Multiline = true;
             this.txtResults.Name = "txtResults";
             this.txtResults.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtResults.Size = new System.Drawing.Size(560, 250);
+            this.txtResults.Size = new System.Drawing.Size(631, 197);
             this.txtResults.TabIndex = 7;
             // 
             // btnInfo
@@ -135,9 +136,9 @@
             // 
             // btnDefaultEmailSend
             // 
-            this.btnDefaultEmailSend.Location = new System.Drawing.Point(480, 83);
+            this.btnDefaultEmailSend.Location = new System.Drawing.Point(513, 84);
             this.btnDefaultEmailSend.Name = "btnDefaultEmailSend";
-            this.btnDefaultEmailSend.Size = new System.Drawing.Size(108, 43);
+            this.btnDefaultEmailSend.Size = new System.Drawing.Size(146, 43);
             this.btnDefaultEmailSend.TabIndex = 12;
             this.btnDefaultEmailSend.Text = "Send by default email address";
             this.btnDefaultEmailSend.UseVisualStyleBackColor = true;
@@ -157,17 +158,28 @@
             // 
             this.btnResolve.Location = new System.Drawing.Point(366, 84);
             this.btnResolve.Name = "btnResolve";
-            this.btnResolve.Size = new System.Drawing.Size(108, 43);
+            this.btnResolve.Size = new System.Drawing.Size(141, 43);
             this.btnResolve.TabIndex = 14;
             this.btnResolve.Text = "Default email address";
             this.btnResolve.UseVisualStyleBackColor = true;
             this.btnResolve.Click += new System.EventHandler(this.btnResolve_Click);
             // 
+            // btnTest
+            // 
+            this.btnTest.Location = new System.Drawing.Point(151, 129);
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(139, 23);
+            this.btnTest.TabIndex = 15;
+            this.btnTest.Text = "Test";
+            this.btnTest.UseVisualStyleBackColor = true;
+            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(607, 395);
+            this.ClientSize = new System.Drawing.Size(678, 395);
+            this.Controls.Add(this.btnTest);
             this.Controls.Add(this.btnResolve);
             this.Controls.Add(this.btnVerifySenderEmail);
             this.Controls.Add(this.btnDefaultEmailSend);
@@ -204,6 +216,7 @@
         private System.Windows.Forms.Button btnDefaultEmailSend;
         private System.Windows.Forms.Button btnVerifySenderEmail;
         private System.Windows.Forms.Button btnResolve;
+        private System.Windows.Forms.Button btnTest;
     }
 }
 

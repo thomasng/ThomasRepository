@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Reflection;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 using Redemption;
+using TestEmail.Properties;
 
 namespace TestEmail
 {
@@ -18,6 +17,16 @@ namespace TestEmail
         Low = 0,
         Default = 1,
         High = 2
+    }
+
+    public enum SenderEmailAccountType
+    {
+        NotFound,
+        DefaulEmailAccount,
+        DelegateForEmailAccount,
+        ExchangeSharedMailBoxAccount,
+        GoogleAppsEmailAccount,
+        NonDefaultEmailAccount,
     }
 
     public class SendEmail
@@ -135,17 +144,6 @@ namespace TestEmail
         }
 
         private const int EmailAccountCategoryFlag = 2;
-
-        /// <summary>
-        /// check if RdoAccount is email account
-        ///     Notes: AccountCategories is a combination of the rdoAccountCategory enums (acStore = 1, acMail = 2, acAddressBook = 4).
-        /// </summary>
-        /// <param name="rdoAccount"></param>
-        /// <returns></returns>
-        private static bool IsEmailAccountCategory(RDOAccount rdoAccount)
-        {
-            return (rdoAccount.AccountCategories & EmailAccountCategoryFlag) != 0;
-        }
 
 
 
@@ -421,27 +419,13 @@ namespace TestEmail
 
         }
 
-        public List<RDOAccount> FindAllEmailAccountsBySenderEmailAddress(string senderEmailAddress)
-        {
-            var accountList = new List<RDOAccount>();
-            foreach (RDOAccount rdoAccount in RdoSession.Accounts)
-            {
-                if (rdoAccount.AccountCategories != AccountCategoryMail &&
-                    rdoAccount.AccountCategories != AccountCategoryMailAndStore)
-                    continue;
 
-                if (String.Compare(senderEmailAddress, rdoAccount.Name, true, CultureInfo.InvariantCulture) == 0)
-                    accountList.Add(rdoAccount);
-            }
 
-            return accountList;
-        }
-
-/*
 
         public void SendTestEmailMessage(string senderEmailAddress, string receiverEmailAddress, string subject)
         {
-            if (!SetToSenderEmailProfile(senderEmailAddress))
+            SenderEmailAccountType senderEmailAccountType;
+            if (!SetToSenderEmailProfile(senderEmailAddress, out senderEmailAccountType))
             {
                 MessageBox.Show(string.Format("Cannot found Profiles having Sender's Email '{0}' account", senderEmailAddress));
                 return;
@@ -454,7 +438,7 @@ namespace TestEmail
 
             RDOMail Msg;
             
-            if (IsSharedMailBoxAccountEmailAddress(senderEmailAddress))
+            if (IsExchangeSharedMailBoxAccountEmailAddress(senderEmailAddress))
             {
                 // for shared mailbox email address
                 var userName = RdoSession.CurrentUser.Name;
@@ -502,91 +486,173 @@ namespace TestEmail
             MessageBox.Show("Email is sent!");
 
         }
-*/
 
-        public void SendTestEmailMessage(string senderEmailAddress, string receiverEmailAddress, string subject)
+
+
+        /// <summary>
+        /// Send the normal email for testing
+        /// </summary>
+        /// <param name="senderEmailAddress"></param>
+        /// <param name="receiverEmailAddress"></param>
+        /// <param name="subject"></param>
+        /// <returns></returns>
+        public Response SendEmailMessageForTesting(string senderEmailAddress, string receiverEmailAddress, string subject)
         {
-            if (!SetToSenderEmailProfile(senderEmailAddress))
+            var response = new Response();
+            // Search and switch to sender email profile
+            SenderEmailAccountType senderEmailAccountType;
+            if (!SetToSenderEmailProfile(senderEmailAddress, out senderEmailAccountType))
             {
                 MessageBox.Show(string.Format("Cannot found Profiles having Sender's Email '{0}' account", senderEmailAddress));
-                return;
-            }
-            else
-            {
-                MessageBox.Show(string.Format("Profile '{0}' contain sender email account.", ProfileName));
+                return null;
             }
 
+            MessageBox.Show(string.Format("Profile '{0}' contain sender email account.", ProfileName));
+            
 
-            RDOMail Msg;
+            // create email for send based on sender email account type
+            Mail = CreateEmail(senderEmailAddress, senderEmailAccountType, response);
 
-            if (IsDefaultEmailAddress(senderEmailAddress))
-            {
-                var drafts = RdoSession.GetDefaultFolder(rdoDefaultFolders.olFolderDrafts);
-                Msg = drafts.Items.Add(Type.Missing);
-                Msg.Account = null;
+            Mail.DeleteAfterSubmit = false;
+            Mail.DownloadPictures = true;
 
-                MessageBox.Show("Sending email to default email account");
-            }
-            else if (IsSharedMailBoxAccountEmailAddress(senderEmailAddress))
-            {
-                // for shared mailbox email address
-                var userName = RdoSession.CurrentUser.Name;
-                var serverName = RdoSession.ExchangeMailboxServerName;
+            Mail.Subject = Subject;
 
-                RdoSession.Logoff();
-
-                RdoSession.LogonExchangeMailbox(userName, serverName);
-                //RdoSession.LogonExchangeMailbox(senderEmailAddress, serverName);
-
-                // set draft folder from shared mailbox
-                var drafts = RdoSession.GetSharedDefaultFolder(senderEmailAddress, rdoDefaultFolders.olFolderDrafts);
-
-                // create new message
-                Msg = drafts.Items.Add(Type.Missing);
-
-                var DelegatedForEntry = FindDelegateAddressEntry(senderEmailAddress);
-                if (DelegatedForEntry != null)
-                {
-                    // use default email account to send on behalf for                  
-                    Msg.SentOnBehalfOf = DelegatedForEntry;
-                    MessageBox.Show("Sending email to exchange share mail box and set DelegatedForEntry");
-                }
-
-                MessageBox.Show("Sending email to exchange share mail box");
-            }
-            else
-            {
-                // delegated or non default email account
-                var drafts = RdoSession.GetDefaultFolder(rdoDefaultFolders.olFolderDrafts);
-                Msg = drafts.Items.Add(Type.Missing);
-
-
-                // check if the sender email is Delegated for address
-                var DelegatedForEntry = FindDelegateAddressEntry(senderEmailAddress);
-                if (DelegatedForEntry != null)
-                {
-                    // use default email account to send on behalf for                  
-                    Msg.SentOnBehalfOf = DelegatedForEntry;
-
-                    MessageBox.Show("Sending email to OnBehalf of email account");
-                }
-                else
-                {
-                    Msg.Account = RdoSession.Accounts[senderEmailAddress];
-                    MessageBox.Show("Sending email to other non-default of email account");
-                }
-            }
-
-
-            Msg.To = receiverEmailAddress;
-            Msg.Recipients.ResolveAll(true, 0);
-            Msg.Subject = subject;
-            Msg.Body = "Test body";
-            Msg.Save();
-            Msg.Send();
+            Mail.To = receiverEmailAddress;
+            Mail.Recipients.ResolveAll(true, 0);
+            Mail.Subject = subject;
+            Mail.Body = "Test body";
+            Mail.Save();
+            Mail.Send();
 
             MessageBox.Show("Email is sent!");
 
+            return response;
+        }
+
+
+        private RDOFolder GetDefaultDraftsFolder(Response response)
+        {
+            try
+            {
+                //_logger.Debug("[RedemptionWrapper::GetDefaultDraftsFolder] ");
+                return RdoSession.GetDefaultFolder(rdoDefaultFolders.olFolderDrafts);
+            }
+            catch (Exception ex)
+            {
+                response.Errors.Add(ex.Message);
+                response.ResponseObject = ex;
+            }
+            return null;
+
+        }
+
+        // do not use multiple dot notation when processing  messages in a loop
+        // http://groups.yahoo.com/neo/groups/Outlook-Redemption/conversations/topics/6568
+        private RDOMail CreateEmail(string senderEmailAddress, SenderEmailAccountType senderEmailAccountType, Response response)
+        {
+            RDOMail mail = null;
+            if (senderEmailAccountType == SenderEmailAccountType.ExchangeSharedMailBoxAccount)
+            {
+                // use shared mailbox to send email
+                // create new email in draft folder from exchange server's shared mail box
+                var draftsFolder = GetExchangeServerSharedDefaultDraftsFolder(senderEmailAddress, response);
+                var draftsFolderItems = draftsFolder.Items;
+                mail = draftsFolderItems.Add(Type.Missing);
+            }
+            else
+            {
+                // use local profile draft folder to send email
+                var draftsFolder = GetDefaultDraftsFolder(response);
+                var draftsFolderItems = draftsFolder.Items;
+                mail = draftsFolderItems.Add(Type.Missing);
+                mail.Account = null;
+
+                if (senderEmailAccountType == SenderEmailAccountType.DelegateForEmailAccount)
+                {
+                    // Set "Sent as on behalf for" from default email account
+                    mail.SentOnBehalfOf = FindDelegateAddressEntry(senderEmailAddress);
+                }
+                else if (senderEmailAccountType == SenderEmailAccountType.NonDefaultEmailAccount)
+                {
+                    // send from other non-default email account
+                    mail.Account = RdoSession.Accounts[senderEmailAddress];
+                }
+                else if (senderEmailAccountType == SenderEmailAccountType.GoogleAppsEmailAccount)
+                {
+                    // send from Google Apps email account
+                    mail.Account = RdoSession.Accounts[GetGoogleAppEmailAccountName(senderEmailAddress)];
+                }
+
+            }
+            return mail;
+        }
+
+
+        public string GetGoogleAppEmailAccountName(string senderEmailAddress)
+        {
+            return string.Format("Google Apps - {0}", senderEmailAddress);
+        }
+
+        /// <summary>
+        /// Find Google Apps email account
+        /// </summary>
+        /// <param name="senderEmailAddress"></param>
+        /// <returns></returns>
+        public RDOAccount FindGoogleAppsEmailAccountBySenderEmailAddress(string senderEmailAddress)
+        {
+            var gmailAppAccountName = GetGoogleAppEmailAccountName(senderEmailAddress);
+            return FindRdoEmailAccountBySenderEmailAddress(gmailAppAccountName);
+
+
+            //var emailAccounts = FindAllEmailAccountsBySenderEmailAddress(gmailAppAccountName);
+
+            //if (emailAccounts.Count == 0)
+            //    return null;
+
+            //if (emailAccounts.Count == 1)
+            //    return emailAccounts[0];
+
+
+            //// order by email acocunt type - atPOP3 , atIMAP , atExchange , atMAPI , atLDAP , atOther 
+            //var orderedEmailAccounts = emailAccounts.OrderBy(a => (int)a.AccountType).ToList();
+
+            //return orderedEmailAccounts[0];
+        }
+
+
+        /// <summary>
+        /// check if RdoAccount is email account
+        ///     Notes: AccountCategories is a combination of the rdoAccountCategory enums (acStore = 1, acMail = 2, acAddressBook = 4).
+        /// </summary>
+        /// <param name="rdoAccount"></param>
+        /// <returns></returns>
+        private static bool IsEmailAccountCategory(RDOAccount rdoAccount)
+        {
+            return (rdoAccount.AccountCategories & EmailAccountCategoryFlag) != 0;
+        }
+
+        private List<RDOAccount> FindAllEmailAccountsBySenderEmailAddress(string senderEmailAddress)
+        {
+            var accountList = new List<RDOAccount>();
+            foreach (RDOAccount rdoAccount in RdoSession.Accounts)
+            {
+                try
+                {
+                    if (!IsEmailAccountCategory(rdoAccount))
+                        continue;
+
+                    if (String.Compare(senderEmailAddress, rdoAccount.Name, true, CultureInfo.InvariantCulture) == 0)
+                        accountList.Add(rdoAccount);
+                }
+                catch
+                {
+                    // DE2235 : As Redemption may result throw exception in some unexpected cases. we decided to ignore any exception and keep continue
+                    continue;
+                }
+            }
+
+            return accountList;
         }
 
         private RDOAccount FindRdoEmailAccountBySenderEmailAddress(string senderEmailAddress)
@@ -599,23 +665,36 @@ namespace TestEmail
             if (emailAccounts.Count == 1)
                 return emailAccounts[0];
 
-            // exchange take priority first
-            var account = emailAccounts.Find(a => a.AccountType == rdoAccountType.atExchange);
-            if (account != null)
-                return account;
+            try
+            {
+                // exchange take priority first
+                var account = emailAccounts.Find(a => a.AccountType == rdoAccountType.atExchange);
+                if (account != null)
+                    return account;
 
-            // order by email acocunt type - atPOP3 , atIMAP , atExchange , atMAPI , atLDAP , atOther 
-            var orderedEmailAccounts = emailAccounts.OrderBy(a => (int)a.AccountType).ToList();
+                // order by email acocunt type - atPOP3 , atIMAP , atExchange , atMAPI , atLDAP , atOther 
+                var orderedEmailAccounts = emailAccounts.OrderBy(a => (int)a.AccountType).ToList();
 
-            return orderedEmailAccounts[0];
+                return orderedEmailAccounts[0];
+            }
+            catch
+            {
+                // DE2235 : As Redemption may result throw exception in some unexpected cases. we decided to ignore any exception and treat the result as not found
+                return null;
+            }
         }
 
-
-        public bool SetToSenderEmailProfile(string senderEmailAddress)
+        internal bool SetToSenderEmailProfile(string senderEmailAddress, out SenderEmailAccountType senderEmailAccountType)
         {
+            senderEmailAccountType = SenderEmailAccountType.NotFound;
+
             // check if sender email in current profile first
-            if (ValidSenderEmailAddressInEmailProfile(senderEmailAddress))
+            var emailAccountType = ValidSenderEmailAddressInEmailProfile(senderEmailAddress);
+            if (emailAccountType != SenderEmailAccountType.NotFound)
+            {
+                senderEmailAccountType = emailAccountType;
                 return true;
+            }
 
             bool profileSwitched = false;
             foreach (string profileName in RdoSession.Profiles)
@@ -630,16 +709,17 @@ namespace TestEmail
                     // logon to other profile
                     SessionLogon();
 
-                    if (!ValidSenderEmailAddressInEmailProfile(senderEmailAddress))
+                    emailAccountType = ValidSenderEmailAddressInEmailProfile(senderEmailAddress);
+                    if (emailAccountType == SenderEmailAccountType.NotFound)
                         continue;
 
                     profileSwitched = true;
+                    senderEmailAccountType = emailAccountType;
                     break;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // capture exception and do nothing if fail to switch to that profile
-                    //_logger.ErrorException("SetToSenderEmailProfile:", ex);
                     ProfileName = string.Empty;
                 }
             }
@@ -647,60 +727,49 @@ namespace TestEmail
             return profileSwitched;
         }
 
+
         /// <summary>
-        /// If sender email addressis configured as Delegate for, then sent out the address entry
+        /// If sender email address configured as Delegate for, then sent out the address entry
         /// </summary>
         /// <param name="senderEmailAddress"></param>
         /// <returns></returns>
         public RDOAddressEntry FindDelegateAddressEntry(string senderEmailAddress)
         {
-            if (RdoSession.CurrentUser == null)
-                return null;
-
-            var isDelegateForEntries = RdoSession.CurrentUser.IsDelegateFor;
-            if (isDelegateForEntries == null)
-                return null;
-
-            for (var i = 1; i <= isDelegateForEntries.Count; i++)
+            try
             {
-                var delegateForEmailAddress = isDelegateForEntries[i].SMTPAddress;
-                if (String.Compare(senderEmailAddress, delegateForEmailAddress, true, CultureInfo.InvariantCulture) == 0)
-                    return isDelegateForEntries[i];
+                if (RdoSession.CurrentUser == null)
+                    return null;
+
+                var isDelegateForEntries = RdoSession.CurrentUser.IsDelegateFor;
+                if (isDelegateForEntries == null)
+                    return null;
+
+                for (var i = 1; i <= isDelegateForEntries.Count; i++)
+                {
+                    var delegateForEmailAddress = isDelegateForEntries[i].SMTPAddress;
+                    if (String.Compare(senderEmailAddress, delegateForEmailAddress, true, CultureInfo.InvariantCulture) == 0)
+                        return isDelegateForEntries[i];
+                }
+
+                return null;
             }
-            return null;
+            catch
+            {
+                // DE2235 : As Redemption may result throw exception in some unexpected cases. we decided to ignore any exception and treat the result as not found
+                return null;
+            }
         }
 
 
-
+        /// <summary>
+        /// Send using  default email address
+        /// </summary>
+        /// <param name="senderEmailAddress"></param>
+        /// <param name="receiverEmailAddress"></param>
+        /// <param name="subject"></param>
         public void SendDefaultTestEmailMessage(string senderEmailAddress, string receiverEmailAddress, string subject)
         {
 
-            if (RdoSession.ExchangeConnectionMode > 0)
-            {
-                var username = RdoSession.CurrentUser.Name;
-                var serverName = RdoSession.ExchangeMailboxServerName;
-
-
-                RdoSession.Logoff();
-
-                RdoSession.LogonExchangeMailbox(username, serverName);
-
-                var sharedDraftFolder = RdoSession.GetSharedDefaultFolder(senderEmailAddress, rdoDefaultFolders.olFolderDrafts);
-
-                var isDelegateFor = RdoSession.CurrentUser.IsDelegateFor;
-
-                var sharedBox = RdoSession.GetSharedMailbox(senderEmailAddress);
-
-
-                int x = 3;
-
-            }
-
-            //if (FindRdoEmailAccountBySenderEmailAddress(senderEmailAddress) == null)
-            //{
-            //    MessageBox.Show(string.Format("Sender's Email address '{0}' cannot found", senderEmailAddress));
-            //    return;
-            //}
 
             var user = RdoSession.CurrentUser;
             if (user != null)
@@ -711,10 +780,8 @@ namespace TestEmail
 
 
             var Drafts = RdoSession.GetDefaultFolder(rdoDefaultFolders.olFolderDrafts);
-            Drafts = RdoSession.GetSharedDefaultFolder(senderEmailAddress, rdoDefaultFolders.olFolderDrafts);
             var Msg = Drafts.Items.Add(Type.Missing);
             var Account = RdoSession.Accounts[senderEmailAddress];
-
 
             if (Account == null)
             {
@@ -726,7 +793,6 @@ namespace TestEmail
 
             Msg.Account = Account;
 
-            Msg.SentOnBehalfOf = FindDelegateAddressEntry(senderEmailAddress);
             Msg.SenderEmailAddress = senderEmailAddress;
             Msg.SenderName = senderEmailAddress;
             Msg.To = receiverEmailAddress;
@@ -787,25 +853,36 @@ namespace TestEmail
 
         }
 */
+
         public string GetDefaultEmailAddress()
         {
-            // need to Kario Connect to initialise so that we can get current user. Otherwise, they will return unknown
-            var folder = RdoSession.GetDefaultFolder(rdoDefaultFolders.olFolderSentMail);
+            try
+            {
+                // need below line for Kerio Connect to initialise so that we can get current user. Otherwise, they will return unknown
+                // Please do not delete below line.
+                var folder = RdoSession.GetDefaultFolder(rdoDefaultFolders.olFolderSentMail);
 
-            if (RdoSession.CurrentUser != null)
-                return RdoSession.CurrentUser.SMTPAddress;
-            return null;
+                if (RdoSession.CurrentUser != null)
+                    return RdoSession.CurrentUser.SMTPAddress;
+                return null;
+            }
+            catch
+            {
+                // DE2235 : As Redemption may result throw exception in some unexpected cases. we decided to ignore any exception and treat the result as not found
+                return null;
+            }
         }
 
         public bool IsDefaultEmailAddress(string senderEmailAddress)
         {
             var defaultEmailAddress = GetDefaultEmailAddress();
-            
             if (string.IsNullOrEmpty(defaultEmailAddress))
                 return false;
 
             return (String.Compare(senderEmailAddress, defaultEmailAddress, true, CultureInfo.InvariantCulture) == 0);
         }
+
+
 
         public bool IsDelegateForEmailAddress(string senderEmailAddress)
         {
@@ -826,39 +903,60 @@ namespace TestEmail
         }
 
 
-        public bool IsSharedMailBoxAccountEmailAddress(string senderEmailAddress)
+        public bool IsExchangeSharedMailBoxAccountEmailAddress(string senderEmailAddress)
         {
-            var isFound = false;
-            if (RdoSession.ExchangeConnectionMode > 0)
+            try
             {
+                if (RdoSession.ExchangeConnectionMode <= 0)
+                    return false;
 
-                try
-                {
-                    var userName = RdoSession.CurrentUser.Name;
-                    var serverName = RdoSession.ExchangeMailboxServerName;
+                // check if we can get exchange server shared mail box drafts folder
+                var response = new Response();
+                var isSharedMailBox = GetExchangeServerSharedDefaultDraftsFolder(senderEmailAddress, response) != null;
 
-                    RdoSession.Logoff();
+                // logon back to current local profile
+                SessionLogon();
 
-                    RdoSession.LogonExchangeMailbox(userName, serverName);
-
-                    var sharedDraftFolder = RdoSession.GetSharedDefaultFolder(senderEmailAddress,
-                                                                              rdoDefaultFolders.olFolderDrafts);
-                    isFound = sharedDraftFolder != null;
-
-                }
-                catch (Exception ex)
-                {
-                    isFound = false;
-                }
-                finally
-                {
-                    // logon back to current profile
-                    SessionLogon();
-                }
+                return isSharedMailBox;
             }
-        
-            return isFound;
+            catch
+            {
+                // DE2235 : As Redemption may result throw exception in some unexpected cases. we decided to ignore any exception and treat the result as not found
+                return false;
+            }
         }
+
+        private RDOFolder GetExchangeServerSharedDefaultDraftsFolder(string senderEmailAddress, Response response)
+        {
+            //_logger.Debug("[RedemptionWrapper::GetExchangeServerSharedDefaultDraftsFolder] ");
+            if (RdoSession.ExchangeConnectionMode <= 0)
+                return null;
+
+            try
+            {
+                // use shared mailbox to send email
+                var userName = RdoSession.CurrentUser.Name;
+                var serverName = RdoSession.ExchangeMailboxServerName;
+
+                RdoSession.Logoff();
+
+                // logon to Exchange server
+                RdoSession.LogonExchangeMailbox(userName, serverName);
+
+                return RdoSession.GetSharedDefaultFolder(senderEmailAddress, rdoDefaultFolders.olFolderDrafts);
+            }
+            catch (Exception ex)
+            {
+                if (response.Errors == null)
+                    response.Errors = new List<string>();
+
+                response.Errors.Add(ex.Message);
+                response.ResponseObject = ex;
+            }
+            return null;
+
+        }
+
 
         public string GetEmailAccountSendBoxItemSenderEmail()
         {
@@ -872,25 +970,24 @@ namespace TestEmail
 
             return null;
         }
-        public bool ValidSenderEmailAddressInEmailProfile(string senderEmailAddress)
+
+        private SenderEmailAccountType ValidSenderEmailAddressInEmailProfile(string senderEmailAddress)
         {
-            // check if default email address in current profile
             if (IsDefaultEmailAddress(senderEmailAddress))
-                return true;
+                return SenderEmailAccountType.DefaulEmailAccount;
 
-            // check if it is Delegated for email address
             if (IsDelegateForEmailAddress(senderEmailAddress))
-                return true;
+                return SenderEmailAccountType.DelegateForEmailAccount;
 
-            if (IsSharedMailBoxAccountEmailAddress(senderEmailAddress))
-                return true;
+            if (IsExchangeSharedMailBoxAccountEmailAddress(senderEmailAddress))
+                return SenderEmailAccountType.ExchangeSharedMailBoxAccount;
 
-            // check if sender email in current profile
             if (FindRdoEmailAccountBySenderEmailAddress(senderEmailAddress) != null)
-                return true;
-            
-            return false;
+                return SenderEmailAccountType.NonDefaultEmailAccount;
+
+            return FindGoogleAppsEmailAccountBySenderEmailAddress(senderEmailAddress) != null ? SenderEmailAccountType.GoogleAppsEmailAccount : SenderEmailAccountType.NotFound;
         }
+
 
         public bool ResolveEmailAddress(string senderEmailAddress)
         {

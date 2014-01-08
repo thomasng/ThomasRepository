@@ -83,6 +83,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="RedemptionLoader.cs" />
+    <Compile Include="RegistryWOW6432.cs" />
+    <Compile Include="Response.cs" />
     <Compile Include="SendEmail.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
