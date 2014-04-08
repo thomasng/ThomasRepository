@@ -1,0 +1,75 @@
+1
+-c
+
+***************************
+Start Time : 7/04/2014 4:48:27 PM 
+
+System Release install path : C:\SOL64\
+
+****  1. Searching Registry Root - [HKEY_CLASSES_ROOT]
+****  Dll path found in registry key :  [HKEY_CLASSES_ROOT\CLSID\{033D2820-A722-11CF-A831-B7B9CDBD5165}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_CLASSES_ROOT\CLSID\{5E70B280-887C-11CF-BEE2-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_CLASSES_ROOT\CLSID\{7D4450A0-BDF5-11CF-BEE3-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_CLASSES_ROOT\CLSID\{9097D000-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_CLASSES_ROOT\CLSID\{9F9E8DA0-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_CLASSES_ROOT\CLSID\{AAF1B920-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_CLASSES_ROOT\CLSID\{C23C7A10-0B7C-11D0-87F0-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_CLASSES_ROOT\CLSID\{C23C7A10-0B7C-11D0-87F1-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+
+****  2. Searching Registry Root - [HKEY_LOCAL_MACHINE]
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{033D2820-A722-11CF-A831-B7B9CDBD5165}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{5E70B280-887C-11CF-BEE2-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{7D4450A0-BDF5-11CF-BEE3-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{9097D000-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{9F9E8DA0-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AAF1B920-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{C23C7A10-0B7C-11D0-87F0-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{C23C7A10-0B7C-11D0-87F1-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{033D2820-A722-11CF-A831-B7B9CDBD5165}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{5E70B280-887C-11CF-BEE2-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{7D4450A0-BDF5-11CF-BEE3-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{9097D000-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{9F9E8DA0-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{AAF1B920-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{C23C7A10-0B7C-11D0-87F0-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+****  Dll path found in registry key :  [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{C23C7A10-0B7C-11D0-87F1-0000E8C45D0E}\InProcServer32\], value = 'C:\SOL64\S6DB32.dll'
+
+****  3. Searching Registry Root - [HKEY_CURRENT_USER]
+
+****  4. Searching Registry Root - [HKEY_USERS]
+  --- Therre are 24 registry keys matched!
+
+****  Start Changing registry value....
+Registry key [HKEY_CLASSES_ROOT\CLSID\{033D2820-A722-11CF-A831-B7B9CDBD5165}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_CLASSES_ROOT\CLSID\{5E70B280-887C-11CF-BEE2-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_CLASSES_ROOT\CLSID\{7D4450A0-BDF5-11CF-BEE3-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_CLASSES_ROOT\CLSID\{9097D000-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_CLASSES_ROOT\CLSID\{9F9E8DA0-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_CLASSES_ROOT\CLSID\{AAF1B920-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_CLASSES_ROOT\CLSID\{C23C7A10-0B7C-11D0-87F0-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_CLASSES_ROOT\CLSID\{C23C7A10-0B7C-11D0-87F1-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{033D2820-A722-11CF-A831-B7B9CDBD5165}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{5E70B280-887C-11CF-BEE2-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{7D4450A0-BDF5-11CF-BEE3-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{9097D000-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{9F9E8DA0-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{AAF1B920-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{C23C7A10-0B7C-11D0-87F0-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\CLSID\{C23C7A10-0B7C-11D0-87F1-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{033D2820-A722-11CF-A831-B7B9CDBD5165}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{5E70B280-887C-11CF-BEE2-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{7D4450A0-BDF5-11CF-BEE3-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{9097D000-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{9F9E8DA0-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{AAF1B920-78D1-11CF-BEE2-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{C23C7A10-0B7C-11D0-87F0-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+Registry key [HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Wow6432Node\CLSID\{C23C7A10-0B7C-11D0-87F1-0000E8C45D0E}\InProcServer32\] is changed from ['C:\SOL64\S6DB32.dll'] to ['C:\SOL64\S6DB32.dll']
+****  Update successfuly !!!
+****  No of registry updated : 24
+****  No of registry fail to update : 0
+
+***************************
+End Time : 7/04/2014 4:49:08 PM 
+Processed Time : 41.5168479 seconds
+
+Press enter to close...

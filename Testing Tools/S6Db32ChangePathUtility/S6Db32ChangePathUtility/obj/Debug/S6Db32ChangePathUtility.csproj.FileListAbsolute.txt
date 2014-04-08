@@ -1,0 +1,8 @@
+C:\Development\Test\S6Db32ChangePathUtility\S6Db32ChangePathUtility\bin\Debug\S6Db32ChangePathUtility.exe
+C:\Development\Test\S6Db32ChangePathUtility\S6Db32ChangePathUtility\bin\Debug\S6Db32ChangePathUtility.pdb
+C:\Development\Test\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6Db32ChangePathUtility.csprojResolveAssemblyReference.cache
+C:\Development\Test\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6Db32ChangePathUtility.MainForm.resources
+C:\Development\Test\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6Db32ChangePathUtility.Properties.Resources.resources
+C:\Development\Test\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6Db32ChangePathUtility.csproj.GenerateResource.Cache
+C:\Development\Test\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6Db32ChangePathUtility.exe
+C:\Development\Test\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6Db32ChangePathUtility.pdb
