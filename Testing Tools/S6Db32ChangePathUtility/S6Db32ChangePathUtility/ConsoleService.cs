@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 
 
 namespace S6Db32ChangePathUtility
@@ -9,6 +8,7 @@ namespace S6Db32ChangePathUtility
         private DateTime _startTime;
         private DateTime _endTime;
 
+        public ScripterLog _scripterLog = new ScripterLog();
 
         public ConsoleService()
         {
@@ -54,6 +54,9 @@ namespace S6Db32ChangePathUtility
         public void RecordResultLog(string text)
         {
             Console.WriteLine(text);
+
+            // write to log file
+            _scripterLog.WriteLn(text, true);
         }
 
         public void UpdateRegistryProcessedStatus(string mode, int procssedNumber)
@@ -81,8 +84,10 @@ namespace S6Db32ChangePathUtility
         public void RecordTitle()
         {
             RecordBlankLine();
-            RecordResultLog("***************************");
+            RecordResultLog("****************************************************************");
+            RecordResultLog("Run in Console commad line mode");
             RecordResultLog(string.Format("Start Time : {0} ", _startTime), false);
+            RecordResultLog(string.Format("Machine Name : {0} ", Environment.MachineName), false);
             RecordBlankLine();
         }
 
@@ -92,6 +97,7 @@ namespace S6Db32ChangePathUtility
             RecordResultLog("***************************");
             RecordResultLog(string.Format("End Time : {0} ", _endTime), false);
             RecordResultLog(string.Format("Processed Time : {0} seconds", (_endTime - _startTime).TotalSeconds), false);
+            RecordResultLog("****************************************************************");
             RecordBlankLine();
         }
 

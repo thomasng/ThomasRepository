@@ -257,7 +257,7 @@ namespace S6Db32ChangePathUtility
             catch (Exception ex)
             {
 
-                Logger.RecordResultLogError(string.Format("Fail to change value of registry key [{0}]", registeryData.Key));
+                Logger.RecordResultLogError(string.Format("Fail to change value of registry key [{0}], Error = {1}", registeryData.Key, ex.Message));
                 return false;
             }
             return true;

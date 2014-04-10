@@ -56,7 +56,7 @@ namespace S6Db32ChangePathUtility
         }
 
         public List<RegistryData> FindAllMatchingRegistryData()
-        {
+        {            
             if (string.IsNullOrEmpty(SrInstallPath))
             {
                 Logger.RecordResultLogError("Cannot found System Release Installation path.");

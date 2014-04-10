@@ -1,6 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Text;
+using System.Windows.Forms;
 
 namespace S6Db32ChangePathUtility
 {
@@ -8,6 +10,8 @@ namespace S6Db32ChangePathUtility
     {
 
         public IMainFormView CurrentView { get; set; }
+
+        public ScripterLog _scripterLog = new ScripterLog();
 
         public MainFormPresenter(IMainFormView view)
         {
@@ -20,6 +24,7 @@ namespace S6Db32ChangePathUtility
         {
             get { return CurrentView.Model; }
         }
+
 
         public void OnLoadData()
         {
@@ -66,6 +71,8 @@ namespace S6Db32ChangePathUtility
         /// <returns></returns>
         public bool FindAllMatch()
         {
+            RecordResultLog("Operation : Find All matching only mode (no modification)");
+
             var mainService = new MainService(this);
             var registryDataList = mainService.FindAllMatchingRegistryData();
 
@@ -77,6 +84,8 @@ namespace S6Db32ChangePathUtility
 
         public bool DoModification()
         {
+            RecordResultLog("Operation : Start modification mode");
+
             var mainService = new MainService(this);
             return mainService.StartRegistryModification();            
         }
@@ -207,6 +216,8 @@ namespace S6Db32ChangePathUtility
                 CurrentView.ShowResultLogMessage(message, true);
             }
 
+            // log message tyo log file
+            _scripterLog.WriteLn(message, true);
         }
 
         public void ClearResultLog()
@@ -269,8 +280,10 @@ namespace S6Db32ChangePathUtility
         public void RecordTitle()
         {
             RecordBlankLine();
-            RecordResultLog("***************************");
+            RecordResultLog("****************************************************************");
+            RecordResultLog("Run in Gui mode");
             RecordResultLog(string.Format("Start Time : {0} ", ViewModel.StartTime), false);
+            RecordResultLog(string.Format("Machine Name : {0} ", Environment.MachineName), false);
             RecordBlankLine();
         }
 
@@ -280,6 +293,7 @@ namespace S6Db32ChangePathUtility
             RecordResultLog("***************************");
             RecordResultLog(string.Format("End Time : {0} ", ViewModel.EndTime), false);
             RecordResultLog(string.Format("Processed Time : {0} seconds", (ViewModel.EndTime - ViewModel.StartTime).TotalSeconds), false);
+            RecordResultLog("****************************************************************");
             RecordBlankLine();
         }
 

@@ -6,3 +6,11 @@ C:\Development\Test\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6
 C:\Development\Test\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6Db32ChangePathUtility.csproj.GenerateResource.Cache
 C:\Development\Test\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6Db32ChangePathUtility.exe
 C:\Development\Test\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6Db32ChangePathUtility.pdb
+C:\Development\GitHub\ThomasRepository\Testing Tools\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6Db32ChangePathUtility.exe
+C:\Development\GitHub\ThomasRepository\Testing Tools\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6Db32ChangePathUtility.pdb
+C:\Development\GitHub\ThomasRepository\Testing Tools\S6Db32ChangePathUtility\S6Db32ChangePathUtility\bin\Debug\S6Db32ChangePathUtility.exe
+C:\Development\GitHub\ThomasRepository\Testing Tools\S6Db32ChangePathUtility\S6Db32ChangePathUtility\bin\Debug\S6Db32ChangePathUtility.pdb
+C:\Development\GitHub\ThomasRepository\Testing Tools\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6Db32ChangePathUtility.csprojResolveAssemblyReference.cache
+C:\Development\GitHub\ThomasRepository\Testing Tools\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6Db32ChangePathUtility.MainForm.resources
+C:\Development\GitHub\ThomasRepository\Testing Tools\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6Db32ChangePathUtility.Properties.Resources.resources
+C:\Development\GitHub\ThomasRepository\Testing Tools\S6Db32ChangePathUtility\S6Db32ChangePathUtility\obj\Debug\S6Db32ChangePathUtility.csproj.GenerateResource.Cache
