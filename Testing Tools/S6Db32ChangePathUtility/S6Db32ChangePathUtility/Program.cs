@@ -48,9 +48,15 @@ namespace S6Db32ChangePathUtility
         ///     
         private static int ParseAndExecuteCommand(string[] args)
         {
-            if (args.Length > 0 && args[0].ToLower() == "-c")
+            if (args.Length > 0 && ContainArgumentValue(args, "-c"))
             {
-                return (new ConsoleService()).StartModification();
+                
+                var confirmToClose = true;
+                // silent mode
+                if (ContainArgumentValue(args, "-s"))
+                    confirmToClose = false;
+
+                return (new ConsoleService()).StartModification(confirmToClose);
             }
             else
             {
@@ -63,6 +69,18 @@ namespace S6Db32ChangePathUtility
         } // ParseAndExecuteCommand
 
 
+        private static bool ContainArgumentValue(string[] args, string value)
+        {
+            if (args.Length == 0)
+                return false;
+
+            for(int i = 0; i < args.Length; i++)
+            {
+                if (args[i].ToLower() == value)
+                    return true;
+            }
+            return false;
+        }
         
     }
 }

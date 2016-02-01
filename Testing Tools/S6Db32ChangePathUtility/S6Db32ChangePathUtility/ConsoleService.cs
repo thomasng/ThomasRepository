@@ -14,7 +14,7 @@ namespace S6Db32ChangePathUtility
         {
         }
 
-        public int StartModification()
+        public int StartModification(bool confirmToClose)
         {
             _startTime = DateTime.Now;
 
@@ -29,8 +29,11 @@ namespace S6Db32ChangePathUtility
 
             RecordFooter();
 
-            Console.WriteLine("Press enter to close...");
-            Console.ReadLine();
+            if (confirmToClose)
+            {
+                Console.WriteLine("Press enter to close...");
+                Console.ReadLine();
+            }
 
             return result ? 0 : -1;
         }
