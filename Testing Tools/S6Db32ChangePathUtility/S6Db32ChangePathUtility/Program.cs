@@ -50,13 +50,18 @@ namespace S6Db32ChangePathUtility
         {
             if (args.Length > 0 && ContainArgumentValue(args, "-c"))
             {
-                
+                var consoleService = new ConsoleService();
+
                 var confirmToClose = true;
                 // silent mode
                 if (ContainArgumentValue(args, "-s"))
+                {
                     confirmToClose = false;
+                    consoleService.SilentMode = true;
+                }
 
-                return (new ConsoleService()).StartModification(confirmToClose);
+
+                return consoleService.StartModification(confirmToClose);
             }
             else
             {

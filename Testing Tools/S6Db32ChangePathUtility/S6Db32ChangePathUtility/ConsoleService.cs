@@ -8,6 +8,8 @@ namespace S6Db32ChangePathUtility
         private DateTime _startTime;
         private DateTime _endTime;
 
+        public bool SilentMode { get; set; }
+
         public ScripterLog _scripterLog = new ScripterLog();
 
         public ConsoleService()
@@ -56,7 +58,8 @@ namespace S6Db32ChangePathUtility
 
         public void RecordResultLog(string text)
         {
-            Console.WriteLine(text);
+            if (!SilentMode)
+                Console.WriteLine(text);
 
             // write to log file
             _scripterLog.WriteLn(text, true);
