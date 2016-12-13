@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using Redemption;
-using TestEmail.Properties;
 
 namespace TestEmail
 {
@@ -151,10 +150,7 @@ namespace TestEmail
 
         public StringBuilder GetInformation(bool emailAcctOnly)
         {
-
-            StringBuilder resultText = new StringBuilder();
-
-
+            var resultText = new StringBuilder();
             
             // no of profiles
             resultText.AppendLine(string.Format("A. No of Profile : {0}", RdoSession.Profiles.Count));
@@ -163,7 +159,6 @@ namespace TestEmail
             MessageBox.Show(resultText.ToString());
 
             resultText.AppendLine(string.Format("Default Profiles : {0}", RdoSession.Profiles.DefaultProfileName));
-
 
 
             int profileIndex = 0;
@@ -176,9 +171,6 @@ namespace TestEmail
                     resultText.AppendLine(string.Format("B. Profile {1}: {0}", profileName, profileIndex));
                     resultText.AppendLine(string.Empty);
 
-
-
-                    //MessageBox.Show(string.Format("Profile name = {0}", profileName));
 
                     if (ProfileName != profileName)
                     {
@@ -213,86 +205,19 @@ namespace TestEmail
                     //resultText.AppendLine(string.Format("A1. Profile {0}: Current User SMTPAddress : {1}", profileName, RdoSession.CurrentUser == null ? "None" : RdoSession.CurrentUser.SMTPAddress));
                     resultText.AppendLine(string.Format("A1. Profile {0}: Current User SMTPAddress : {1}", profileName, defaultEmail == null ? "None" : defaultEmail));
                     resultText.AppendLine(string.Empty);
-
-
-                    //MessageBox.Show(string.Format("Logon done Profile name = {0}", profileName));
+                    
 
                     // all email accounts
-                    resultText.AppendLine(string.Format("B1. Searching Emails Account in Profile : {0}", profileName));
-                    resultText.AppendLine(string.Empty);
+                    resultText.AppendLine("*******************");
+                    resultText.AppendLine(string.Format("B1. Searching Email Accounts in Profile : {0}, No of accounts = {1}", profileName, RdoSession.Accounts.Count));
+                    resultText.AppendLine(string.Empty);                    
+                    var accountCounter = 1;
                     foreach (RDOAccount rdoAccount in RdoSession.Accounts)
                     {
-
-                        if (emailAcctOnly)
-                        {
-                            if (!IsEmailAccountCategory(rdoAccount))
-                                continue;
-                        }
-
-                        resultText.AppendLine(string.Format("** Email Account: {0}, Type = {1}, Category = {2}",
-                                                            rdoAccount.Name, rdoAccount.AccountTypeStr,
-                                                            rdoAccount.AccountCategories.ToString()));
-
-   
-                        switch (rdoAccount.AccountType)
-                        {                                
-                                case rdoAccountType.atPOP3:
-                                {
-                                    resultText.AppendLine(string.Format(" ----- Pop3 account, SMTPAddress = {0}, ",((IRDOPOP3Account) rdoAccount).SMTPAddress));
-                                    break;
-                                }
-                                case rdoAccountType.atHTTP:
-                                {
-                                    resultText.AppendLine(string.Format(" ----- HTTPAccount account, SMTPAddress = {0}, ",((RDOHTTPAccount) rdoAccount).SMTPAddress));
-                                    break;
-                                }
-                                case rdoAccountType.atIMAP:
-                                {
-                                    resultText.AppendLine(string.Format(" ----- atIMAP account, SMTPAddress = {0}, ",((RDOIMAPAccount) rdoAccount).SMTPAddress));
-                                    break;
-                                }
-                                case rdoAccountType.atExchange:
-                                {
-
-                                    foreach( RDOStore store in RdoSession.Stores)
-                                    {
-                                        try
-                                        {
-                                            if (store.StoreKind == TxStoreKind.skPrimaryExchangeMailbox)
-                                            {
-                                                RDOExchangeMailboxStore exStore = (RDOExchangeMailboxStore)store;
-                                                resultText.AppendLine("----- atExchange account, SMTPAddress" + exStore.Owner.SMTPAddress);
-                                            }
-
-                                        }
-                                        catch (Exception ex)
-                                        {
-
-                                            //resultText.AppendLine(ex.Message);
-                                        }
-                                    }
-                                    //RDOMAPIAccount acct = rdoAccount as RDOMAPIAccount;
-                                    //var isExchange = acct.IsExchange;
-                                    //var x1 = acct.ServiceName;
-                                    //var x2 = acct.ServiceUID;
-                                    //var x3 = acct.Name;
-                                    //var x4 = acct.ID;
-                                    //var x5 = acct.Stamp;
-                                    //resultText.AppendLine(string.Format(" ----- atExchange account, SMTPAddress = {0}, ", ((RDOIMAPAccount)rdoAccount).SMTPAddress));
-                                    break;
-                                }
-                                //case rdoAccountType.atMAPI:
-                                //{
-                                //    resultText.AppendLine(string.Format(" ----- atMAPI account, SMTPAddress = {0}, ", ((RDOIMAPAccount)rdoAccount).SMTPAddress));
-                                //    break;
-                                //}
-
-
-                        }
-
-                        
+                        AppendRdoAccountInformation(rdoAccount, resultText, emailAcctOnly, accountCounter++);                   
                     }
 
+                    resultText.AppendLine("*******************");
 
                     resultText.AppendLine(string.Empty);
                     resultText.AppendLine(string.Empty);
@@ -317,6 +242,8 @@ namespace TestEmail
                         resultText.AppendLine(string.Format(" -- DelegerateFor  = {0}, ", delegateForEmailAddress));
                     }
                     resultText.AppendLine(string.Empty);
+
+                    resultText.AppendLine("*******************");
 
 
                     //MessageBox.Show(resultText.ToString());
@@ -382,7 +309,8 @@ namespace TestEmail
                 }
                 catch (Exception ex)
                 {
-                    resultText.AppendLine(string.Format("Error : {0}\n Stack: {1}", ex.Message, ex.StackTrace));
+                    
+                    resultText.AppendLine(string.Format("Error for Get Information: {0}", ExceptionHelper.GetExceptionDetails(ex)));
                 }
             }
 
@@ -391,6 +319,85 @@ namespace TestEmail
             return resultText;
         }
 
+
+        private void AppendRdoAccountInformation(RDOAccount rdoAccount, StringBuilder resultText, bool emailAcctOnly, int accountNumber)
+        {
+
+            if (emailAcctOnly)
+            {
+                if (!IsEmailAccountCategory(rdoAccount))
+                {                    
+                    return;
+                }
+            }
+
+            resultText.AppendLine(string.Format("** {0} Email Account: {1}, Type = {2}, Category = {3}",
+                                                accountNumber, rdoAccount.Name, rdoAccount.AccountTypeStr, rdoAccount.AccountCategories.ToString()));
+
+
+            switch (rdoAccount.AccountType)
+            {
+                case rdoAccountType.atPOP3:
+                    {
+                        resultText.AppendLine(string.Format(" ----- Pop3 account, SMTPAddress = {0}, ", ((IRDOPOP3Account)rdoAccount).SMTPAddress));
+                        break;
+                    }
+                case rdoAccountType.atHTTP:
+                    {
+                        resultText.AppendLine(string.Format(" ----- HTTPAccount account, SMTPAddress = {0}, ", ((RDOHTTPAccount)rdoAccount).SMTPAddress));
+                        break;
+                    }
+                case rdoAccountType.atIMAP:
+                    {
+                        resultText.AppendLine(string.Format(" ----- atIMAP account, SMTPAddress = {0}, ", ((RDOIMAPAccount)rdoAccount).SMTPAddress));
+                        break;
+                    }
+                case rdoAccountType.atExchange:
+                    {
+
+                        foreach (RDOStore store in RdoSession.Stores)
+                        {
+                            try
+                            {
+                                if (store.StoreKind == TxStoreKind.skPrimaryExchangeMailbox)
+                                {
+                                    RDOExchangeMailboxStore exStore = (RDOExchangeMailboxStore)store;
+                                    resultText.AppendLine("----- atExchange account, SMTPAddress" + exStore.Owner.SMTPAddress);
+                                }
+
+                            }
+                            catch (Exception ex)
+                            {
+
+                                //resultText.AppendLine(ex.Message);
+                            }
+                        }
+                        //RDOMAPIAccount acct = rdoAccount as RDOMAPIAccount;
+                        //var isExchange = acct.IsExchange;
+                        //var x1 = acct.ServiceName;
+                        //var x2 = acct.ServiceUID;
+                        //var x3 = acct.Name;
+                        //var x4 = acct.ID;
+                        //var x5 = acct.Stamp;
+                        //resultText.AppendLine(string.Format(" ----- atExchange account, SMTPAddress = {0}, ", ((RDOIMAPAccount)rdoAccount).SMTPAddress));
+                        break;
+                    }
+                case rdoAccountType.atMAPI:
+                    {
+                        resultText.AppendLine(string.Format(" ----- MAPI account, Service Name = {0}, Name = {1}", ((RDOMAPIAccount)rdoAccount).ServiceName,
+                                                ((RDOMAPIAccount)rdoAccount).Name));
+                        break;
+                    }
+                default:
+                    {
+                        resultText.AppendLine(string.Format(" ----- Account Type account = {0}, ", rdoAccount.AccountType.ToString()));
+                        break;
+
+                    }
+            }
+
+            resultText.AppendLine("     ");
+        }
 
         public string GetEmailAddressForAccount(RDOAccount rdoAccount)
         {
@@ -866,7 +873,7 @@ namespace TestEmail
                     return RdoSession.CurrentUser.SMTPAddress;
                 return null;
             }
-            catch
+            catch (Exception ex)
             {
                 // DE2235 : As Redemption may result throw exception in some unexpected cases. we decided to ignore any exception and treat the result as not found
                 return null;

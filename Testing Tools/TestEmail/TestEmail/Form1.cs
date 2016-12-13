@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Microsoft.Win32;
@@ -39,7 +40,7 @@ namespace TestEmail
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            Text = string.Format("{0} - Version {1}", Text, Assembly.GetExecutingAssembly().GetName().Version.ToString());
         }
 
         private void btnInfo_Click(object sender, EventArgs e)
