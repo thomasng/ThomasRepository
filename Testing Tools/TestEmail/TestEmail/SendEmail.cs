@@ -530,13 +530,29 @@ namespace TestEmail
             Mail.Subject = subject;
             Mail.Body = "Test body";
             Mail.Save();
-            Mail.Send();
+
+            
+            try
+            {
+                Mail.Send();
+            }
+            catch (Exception ex)
+            {                
+                MessageBox.Show(string.Format("Mail.Send() Error = {0}, stack={1}", ex.Message, ex.StackTrace));
+
+                MessageBox.Show(string.Format("Account name = {0}, Type = {1}", Mail.Account.Name,
+                    Mail.Account.AccountTypeStr));
+                throw ex;
+
+            }
+            
 
             MessageBox.Show("Email is sent!");
 
             return response;
         }
 
+    
 
         private RDOFolder GetDefaultDraftsFolder(Response response)
         {
